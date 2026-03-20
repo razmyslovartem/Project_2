@@ -1,9 +1,12 @@
 # api_clients.py
 """Модуль с классами для работы по внешним API"""
 
-from typing import Any, Dict, Union
+from typing import Any
+from typing import Dict
+from typing import Optional
+from typing import Union
 
-from requests import Response, get
+import requests
 
 from src.abstract import BaseApi
 
@@ -15,14 +18,14 @@ class APIAdapter(BaseApi):
 
     __url_map: str  # nominatim.openstreetmap.org
     __url_sky: str  # opensky-network.org
-    __aeroplanes: Any | None
+    __aeroplanes: Optional[Any]
 
     def __init__(self) -> None:
         super().__init__()  # Два атрибута базового класса.
         self.__aeroplanes = None  # Добавим атрибут для использования.
 
     @property
-    def aeroplanes(self) -> Any | None:
+    def aeroplanes(self) -> Optional[Any]:
         """Метод обращения к уже имеющимся данным для их чтения"""
         return self.__aeroplanes
 
@@ -38,7 +41,7 @@ class APIAdapter(BaseApi):
             "limit": 1,
         }
 
-        response_map: Response = get(
+        response_map: requests.Response = requests.get(
             url=self.url_map,
             params=params_nominatim,
             headers=headers_nominatim,
@@ -71,7 +74,7 @@ class APIAdapter(BaseApi):
             "lomax": float(geo_coordinates[3]),
         }
 
-        response_sky: Response = get(
+        response_sky: requests.Response = requests.get(
             url=self.url_sky,
             params=params,
             timeout=10,

@@ -3,12 +3,13 @@
 
 from __future__ import annotations
 
-from abc import ABC, abstractmethod
+from abc import ABC
+from abc import abstractmethod
 from pathlib import Path
 from typing import Any
 
-
 # ==================== API слой ====================
+
 
 class BaseApi(ABC):
     """Абстрактный базовый класс для APIAdapter"""
@@ -35,6 +36,7 @@ class BaseApi(ABC):
 
 
 # ==================== Модель самолёта ====================
+
 
 class BaseAeroplane(ABC):
     """Абстрактный базовый класс для обработки данных о самолётах"""
@@ -72,6 +74,7 @@ class BaseAeroplane(ABC):
 
 
 # ==================== Работа с файлами ====================
+
 
 class BaseProcessing(ABC):
     """Абстрактный класс для работы с файлами и данными о самолётах"""
