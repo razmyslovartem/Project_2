@@ -8,6 +8,8 @@ from pathlib import Path
 from typing import Any
 
 
+# ==================== API слой ====================
+
 class BaseApi(ABC):
     """Абстрактный базовый класс для APIAdapter"""
 
@@ -32,10 +34,12 @@ class BaseApi(ABC):
         raise NotImplementedError("Метод get_aeroplanes ещё не определен")
 
 
+# ==================== Модель самолёта ====================
+
 class BaseAeroplane(ABC):
     """Абстрактный базовый класс для обработки данных о самолётах"""
 
-    #  Для ограничения набора атрибутов и экономии памяти.
+    # Для ограничения набора атрибутов и экономии памяти.
     __slots__ = ("_callsign", "_reg_country", "_velocity", "_altitude")
 
     def __init__(self, callsign: str, reg_country: str, velocity: float, altitude: float) -> None:
@@ -67,10 +71,12 @@ class BaseAeroplane(ABC):
         raise NotImplementedError("Метод get_filter_aeroplanes ещё не определен")
 
 
+# ==================== Работа с файлами ====================
+
 class BaseProcessing(ABC):
     """Абстрактный класс для работы с файлами и данными о самолётах"""
 
-    __filename: str  # Имя файла сохраняющего данные.
+    __filename: str
 
     def __init__(self, __filename: str = "aeroplanes.json") -> None:
         root_dir = Path(__file__).resolve().parent.parent  # src -> корень проекта
