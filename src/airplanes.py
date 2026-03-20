@@ -88,10 +88,13 @@ class Aeroplane(BaseAeroplane):
         result: list[Aeroplane] = []
 
         for state in states:
-            callsign = state[1] or ""
-            reg_country = state[2] or ""
-            altitude = state[7] or 0.0
-            velocity = state[9] or 0.0
+            try:
+                callsign = state[1] or ""
+                reg_country = state[2] or ""
+                altitude = state[7] or 0.0
+                velocity = state[9] or 0.0
+            except IndexError:
+                continue
 
             try:
                 plane = cls(
