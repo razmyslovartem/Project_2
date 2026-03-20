@@ -24,37 +24,28 @@ class Aeroplane(BaseAeroplane):
         altitude: float,
     ) -> None:
         # Заводим атрибуты в конструктор применяя методы проверки входных данных.
-        callsign = self.__validate_callsign(callsign)
-        reg_country = self.__validate_reg_country(reg_country)
-        velocity = self.__validate_velocity(velocity)
-        altitude = self.__validate_altitude(altitude)
+        callsign = self.__validate_string(callsign, "callsign пустая строка")
+        reg_country = self.__validate_string(reg_country, "reg_country пустая строка")
+        velocity = self.__validate_number(velocity, "velocity", "velocity должно быть в виде int, float")
+        altitude = self.__validate_number(altitude, "altitude", "altitude должна быть int, float")
 
         super().__init__(callsign, reg_country, velocity, altitude)
 
     # ===========> Приватные методы проверок входных данных <===========
 
-    def __validate_callsign(self, value: str) -> str:
-        if not isinstance(value, str) or not value.strip():
-            raise ValueError("callsign пустая строка")
-        return value.strip()
+    def __validate_string(self, value: str, error_msg: str) -> str:
+        """Валидация строковых значений (не пустая строка)"""
+        if isinstance(value, str):
+            if value := value.strip():
+                return value
+        raise ValueError(error_msg)
 
-    def __validate_reg_country(self, value: str) -> str:
-        if not isinstance(value, str) or not value.strip():
-            raise ValueError("reg_country пустая строка")
-        return value.strip()
-
-    def __validate_velocity(self, value: float) -> float:
+    def __validate_number(self, value: float, field_name: str, type_error_msg: str) -> float:
+        """Валидация числовых значений (тип и неотрицательное значение)"""
         if not isinstance(value, (int, float)):
-            raise TypeError("velocity должно быть в виде int, float")
+            raise TypeError(type_error_msg)
         if value < 0:
-            raise ValueError("velocity не может быть отрицательной")
-        return float(value)
-
-    def __validate_altitude(self, value: float) -> float:
-        if not isinstance(value, (int, float)):
-            raise TypeError("altitude должна быть int, float")
-        if value < 0:
-            raise ValueError("altitude не может быть отрицательной")
+            raise ValueError(f"{field_name} не может быть отрицательной")
         return float(value)
 
     # ===========> Шесть методов сравнения через functools <===========
