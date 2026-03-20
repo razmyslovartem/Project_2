@@ -39,20 +39,26 @@ def test_init_object(fix_obj_aeroplane: Aeroplane, fix_init_aeroplane: dict) -> 
     assert test_obj.__lt__(fix_obj_aeroplane) is False
 
 
-def test_init_invalid_types_raises() -> None:
+@pytest.mark.parametrize(
+    "callsign, reg_country, velocity, altitude",
+    [
+        (1, "Canada", 250.4, 12545.5),           # callsign не строка
+        ("BORT_007", 1, 250.4, 12545.5),         # reg_country не строка
+        ("BORT_007", "Canada", -345, 12545.5),   # отрицательная скорость
+        ("BORT_007", "Canada", 250.4, -2345.7),  # отрицательная высота
+        ("BORT_007", "Canada", "123", 12545.5),  # velocity не число
+        ("BORT_007", "Canada", 250.4, "123"),    # altitude не число
+    ]
+)
+def test_init_invalid_types_raises(
+    callsign: str,
+    reg_country: str,
+    velocity: float,
+    altitude: float
+) -> None:
     """Проверка, что некорректные типы вызывают исключение."""
     with pytest.raises((TypeError, ValueError)):
-        Aeroplane(1, "Canada", 250.4, 12545.5)  # type: ignore[arg-type]
-    with pytest.raises((TypeError, ValueError)):
-        Aeroplane("BORT_007", 1, 250.4, 12545.5)  # type: ignore[arg-type]
-    with pytest.raises((TypeError, ValueError)):
-        Aeroplane("BORT_007", "Canada", -345, 12545.5)  # type: ignore[arg-type]
-    with pytest.raises((TypeError, ValueError)):
-        Aeroplane("BORT_007", "Canada", 250.4, -2345.7)  # type: ignore[arg-type]
-    with pytest.raises((TypeError, ValueError)):
-        Aeroplane("BORT_007", "Canada", "123", 12545.5)  # type: ignore[arg-type]
-    with pytest.raises((TypeError, ValueError)):
-        Aeroplane("BORT_007", "Canada", 250.4, "123")  # type: ignore[arg-type]
+        Aeroplane(callsign, reg_country, velocity, altitude)  # type: ignore[arg-type]
 
 
 def test_aeroplane_str(fix_init_aeroplane: dict) -> None:
